@@ -8,93 +8,109 @@
     <title>Whack A Mole!</title>
 </head>
 <style>
-    body {
-        padding: 0;
-        margin: 0;
-        text-align: center;
-    }
-
-    h1 {
-        text-align: center;
-        font-size: 55px;
-        line-height: 1;
-        margin-bottom: 0;
-    }
-
-    .hole {
-        background-color: sienna;
-        flex-basis: calc(100% / 3 - 4px);
-        display: white;
-        margin: 2px;
-
-    }
-
-
-    .start {
-        text-align: center;
-    }
-
-    h1 {
-        text-align: center;
-        font-size: 36;
-        margin-bottom: 0;
-    }
-
-    .score {
-        background: gold;
-        padding: 0 48px;
-        line-height: 4;
-        border-radius: 16px;
-        font-size: 30px;
-        color: white;
-        margin-left: 15px;
-
-    }
-
-    .game {
-
-        width: 1000px;
-        height: 500px;
+    .grid {
+        width: 800px;
+        height: 600px;
         display: flex;
         flex-wrap: wrap;
-        margin: 0 auto;
+    }
+    button {
+        background: rgba(190, 19, 19, 0.2);
+        border: red;
+        font-size: 30px;
+        cursor: pointer;
+    }
+    .square {
+        height: 200px;
+        width: 200px;
+        border: solid white 2px;
+        background-color: saddlebrown;
     }
 
-    button {
-        background: red;
-        border: black;
-        font-size: 40px;
-        cursor: pointer;
+
+
+    .mole {
+        background-color: aqua;
     }
 </style>
 
 <body>
-    <h1>Whack-a-mole!</h1><span class="score">0</span>
-    <button onClick="startGame()">Start!</button>
+    <h1>Whack-A-Mole!</h1>
+    <button type="button" onclick= >Start!</button>
+ 
 
-    <div class="game">
-        <div class="hole hole1">
-        </div>
+    <h2>Your score:</h2>
+    <h2 id="score">0</h2>
 
-        <div class="hole hole2">
-        </div>
+    <h2>Time Left:</h2>
+    <h2 id="time-left">60</h2>
 
-        <div class="hole hole3">
-
-        </div>
-
-        <div class="hole hole4">
-
-        </div>
-
-        <div class="hole hole5">
-
-        </div>
-
-        <div class="hole hole6">
-        </div>
+    <div class="grid">
+        <div class="square" id="1"></div>
+        <div class="square" id="2"></div>
+        <div class="square" id="3"></div>
+        <div class="square" id="4"></div>
+        <div class="square" id="5"></div>
+        <div class="square" id="6"></div>
+        <div class="square" id="7"></div>
+        <div class="square" id="8"></div>
+        <div class="square" id="9"></div>
     </div>
-    <script></script>
+
+    </div>
+    <script>
+        const squares = document.querySelectorAll('.square')
+        const mole = document.querySelector('.mole')
+        const timeLeft = document.querySelector('#time-left')
+        const score = document.querySelector('#score')
+
+        let result = 0
+        let hitPosition
+        let currentTime = 60
+        let timerId = null
+
+        function randomSquare() {
+            squares.forEach(square => {
+                square.classList.remove('mole')
+            })
+
+            let randomSquare = squares[Math.floor(Math.random() * 9)]
+            randomSquare.classList.add('mole')
+
+            hitPosition = randomSquare.id
+        }
+        squares.forEach(square => {
+            square.addEventListener('mousedown', () => {
+                if (square.id == hitPosition) {
+                    result++
+                    console.log(result);
+                    score.textContent = result
+                    hitPosition = null
+                }
+            })
+        })
+
+        function moveMole() {
+            let timerId = null
+            timerId = setInterval(randomSquare, 1000)
+        }
+        moveMole()
+
+        function countDown() {
+
+            currentTime--
+            timeLeft.textContent = currentTime
+
+            if (currentTime == 0) {
+                clearInterval(countDownTimerId)
+                clearInterval(timerId)
+                alert('GAME OVER! Your final score is ' + result)
+            }
+        }
+        let countDownTimerId = setInterval(countDown, 1000)
+
+    </script>
+
 </body>
 
 </html>
